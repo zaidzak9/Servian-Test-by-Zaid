@@ -1,4 +1,4 @@
-package com.zaidzakir.serviantest.models
+package com.zaidzakir.serviantest.data.models.users
 
 data class UsersMainDataItem(
     val address: Address,
