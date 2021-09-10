@@ -14,7 +14,7 @@ interface MainRepository {
 
     suspend fun getRemoteUserInfo(): Resource<UsersMainData>
 
-    suspend fun getRemoteAlbumInfo(): Resource<AlbumData>
+    suspend fun getRemoteAlbumInfo(albumId:String): Resource<AlbumData>
 
     fun getLocalUserInfo():LiveData<List<UsersMainDataItem>>
 

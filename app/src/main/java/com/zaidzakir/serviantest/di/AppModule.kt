@@ -3,7 +3,10 @@ package com.zaidzakir.serviantest.di
 import android.content.Context
 import androidx.room.Room
 import com.zaidzakir.serviantest.data.localDB.ServianDatabase
+import com.zaidzakir.serviantest.data.localDB.UserDAO
 import com.zaidzakir.serviantest.data.remote.UserApi
+import com.zaidzakir.serviantest.repository.DefaultRepository
+import com.zaidzakir.serviantest.repository.MainRepository
 import com.zaidzakir.serviantest.util.Constants.BASE_URL
 import com.zaidzakir.serviantest.util.Constants.DATABASE_NAME
 import dagger.Module
@@ -52,4 +55,11 @@ object AppModule {
     fun provideUserDao(
         database: ServianDatabase
     ) = database.getUserDao()
+
+    @Singleton
+    @Provides
+    fun provideDefaultRepository(
+        userApi: UserApi,
+        userDAO: UserDAO
+    ) = DefaultRepository(userApi = userApi,userDAO = userDAO) as MainRepository
 }
