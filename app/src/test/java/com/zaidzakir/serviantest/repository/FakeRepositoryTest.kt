@@ -27,17 +27,17 @@ class FakeRepositoryTest : MainRepository {
 
     override suspend fun getRemoteUserInfo(): Resource<UsersMainData> {
         return if (shouldReturnNetworkError){
-            Resource.Error("Error",null)
+            Resource.error("Error",null)
         }else{
-            Resource.Success(UsersMainData())
+            Resource.success(UsersMainData())
         }
     }
 
     override suspend fun getRemoteAlbumInfo(albumId: String): Resource<AlbumData> {
         return if (shouldReturnNetworkError){
-            Resource.Error("Error",null)
+            Resource.error("Error",null)
         }else{
-            Resource.Success(AlbumData())
+            Resource.success(AlbumData())
         }
     }
 

@@ -4,11 +4,28 @@ package com.zaidzakir.serviantest.util
  *Created by Zaid Zakir
  */
 
-sealed class Resource<T>(
+class Resource<T>(
+    val status: Status,
     val data: T? = null,
     val error: String? = null
 ) {
-    class Success<T>(data: T) : Resource<T>(data)
-    class Loading<T>(data: T? = null) : Resource<T>(data)
-    class Error<T>(throwable: String, data: T? = null) : Resource<T>(data, throwable)
+    companion object {
+        fun <T> success(data: T?): Resource<T> {
+            return Resource(Status.SUCCESS, data, null)
+        }
+
+        fun <T> error(msg: String, data: T?): Resource<T> {
+            return Resource(Status.ERROR, data, msg)
+        }
+
+        fun <T> loading(data: T?): Resource<T> {
+            return Resource(Status.LOADING, data, null)
+        }
+    }
+}
+
+enum class Status {
+    SUCCESS,
+    ERROR,
+    LOADING
 }

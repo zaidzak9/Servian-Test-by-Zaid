@@ -24,13 +24,13 @@ class DefaultRepository @Inject constructor(
             val response = userApi.getUsers()
             if (response.isSuccessful){
                 response.body()?.let {userResponse ->
-                    return@let Resource.Success(userResponse)
-                }?: Resource.Error("An unknown error occurred",null)
+                    return@let Resource.success(userResponse)
+                }?: Resource.error("An unknown error occurred",null)
             }else{
-                Resource.Error("An unknown error occurred",null)
+                Resource.error("An unknown error occurred",null)
             }
         }catch (e: Exception){
-            return Resource.Error("Something went wrong! $e",null)
+            return Resource.error("Something went wrong! $e",null)
         }
     }
 
@@ -39,13 +39,13 @@ class DefaultRepository @Inject constructor(
             val response = userApi.getAlbums(albumId)
             if (response.isSuccessful){
                 response.body()?.let {albumResponse ->
-                    return@let Resource.Success(albumResponse)
-                }?: Resource.Error("An unknown error occurred",null)
+                    return@let Resource.success(albumResponse)
+                }?: Resource.error("An unknown error occurred",null)
             }else{
-                Resource.Error("An unknown error occurred",null)
+                Resource.error("An unknown error occurred",null)
             }
         }catch (e:Exception){
-            return Resource.Error("Something went wrong! $e",null)
+            return Resource.error("Something went wrong! $e",null)
         }
     }
 
