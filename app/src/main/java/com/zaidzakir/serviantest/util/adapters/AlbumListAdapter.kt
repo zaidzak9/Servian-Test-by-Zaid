@@ -7,7 +7,13 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.zaidzakir.serviantest.R
-import com.zaidzakir.serviantest.data.models.albums.AlbumData
+import com.zaidzakir.serviantest.data.models.albums.AlbumDataItem
+import com.zaidzakir.serviantest.util.ImageViewerHelper
+import kotlinx.android.synthetic.main.adapter_album_list.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  *Created by Zaid Zakir
@@ -15,17 +21,17 @@ import com.zaidzakir.serviantest.data.models.albums.AlbumData
 class AlbumListAdapter : RecyclerView.Adapter<AlbumListAdapter.AlbumListViewHolder>() {
     class AlbumListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
-    private val diffCallback = object : DiffUtil.ItemCallback<AlbumData>() {
-        override fun areItemsTheSame(oldItem: AlbumData, newItem: AlbumData): Boolean {
+    private val diffCallback = object : DiffUtil.ItemCallback<AlbumDataItem>() {
+        override fun areItemsTheSame(oldItem: AlbumDataItem, newItem: AlbumDataItem): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: AlbumData, newItem: AlbumData): Boolean {
+        override fun areContentsTheSame(oldItem: AlbumDataItem, newItem: AlbumDataItem): Boolean {
             return oldItem == newItem
         }
     }
 
-    private val differ = AsyncListDiffer(this, diffCallback)
+    val differ = AsyncListDiffer(this, diffCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumListViewHolder {
         return AlbumListViewHolder(
@@ -44,8 +50,23 @@ class AlbumListAdapter : RecyclerView.Adapter<AlbumListAdapter.AlbumListViewHold
     }
 
     override fun onBindViewHolder(holder: AlbumListViewHolder, position: Int) {
-
+        val albumInfo = differ.currentList[position]
+        holder.itemView.apply {
+            tv_image_name.text = albumInfo.title
+            CoroutineScope(Dispatchers.IO).launch{
+                val bitmap = ImageViewerHelper.downloadBitmap(albumInfo.thumbnailUrl.toString())
+                withContext(Dispatchers.Main){
+                    iv_thumbnail.setImageBitmap(bitmap)
+                }
+            }
+            setOnClickListener {
+                onItemClickListener?.let {
+                    it(albumInfo.url.toString())
+                }
+            }
+        }
     }
+
 
     override fun getItemCount(): Int {
         return differ.currentList.size
