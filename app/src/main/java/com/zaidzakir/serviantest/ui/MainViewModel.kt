@@ -59,7 +59,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val response = repository.getRemoteUserInfo()
             _users.value = Events(response)
-
         }
     }
 

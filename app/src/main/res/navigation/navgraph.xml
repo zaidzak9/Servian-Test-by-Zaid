@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_albumListFragment_to_albumImageViewFragment"
             app:destination="@id/albumImageViewFragment" />
+        <argument
+            android:name="ID"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/albumImageViewFragment"

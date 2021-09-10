@@ -1,5 +1,6 @@
 package com.zaidzakir.serviantest.util.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.zaidzakir.serviantest.R
 import com.zaidzakir.serviantest.data.models.users.UsersMainData
+import com.zaidzakir.serviantest.data.models.users.UsersMainDataItem
+import kotlinx.android.synthetic.main.adapter_user_info.view.*
 
 /**
  *Created by Zaid Zakir
@@ -16,17 +19,17 @@ class UserInfoAdapter : RecyclerView.Adapter<UserInfoAdapter.UserInfoViewHolder>
 
     class UserInfoViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
-    private val diffCallback = object : DiffUtil.ItemCallback<UsersMainData>() {
-        override fun areItemsTheSame(oldItem: UsersMainData, newItem: UsersMainData): Boolean {
+    private val diffCallback = object : DiffUtil.ItemCallback<UsersMainDataItem>() {
+        override fun areItemsTheSame(oldItem: UsersMainDataItem, newItem: UsersMainDataItem): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: UsersMainData, newItem: UsersMainData): Boolean {
+        override fun areContentsTheSame(oldItem: UsersMainDataItem, newItem: UsersMainDataItem): Boolean {
             return oldItem == newItem
         }
     }
 
-    private val differ = AsyncListDiffer(this, diffCallback)
+    val differ = AsyncListDiffer(this, diffCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserInfoViewHolder {
         return UserInfoViewHolder(
@@ -45,7 +48,18 @@ class UserInfoAdapter : RecyclerView.Adapter<UserInfoAdapter.UserInfoViewHolder>
     }
 
     override fun onBindViewHolder(holder: UserInfoViewHolder, position: Int) {
-
+        val userInfo = differ.currentList[position]
+        holder.itemView.apply {
+            tv_id.text = userInfo.id.toString()
+            tv_name.text = userInfo.name
+            tv_email.text = userInfo.email
+            tv_phone.text = userInfo.phone
+            setOnClickListener {
+                onItemClickListener?.let {
+                    it(userInfo.id.toString())
+                }
+            }
+        }
     }
 
     override fun getItemCount(): Int {

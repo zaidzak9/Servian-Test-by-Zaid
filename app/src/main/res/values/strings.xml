@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Servian Test by Zaid</string>
+    <string name="fragment_user_info_header">User Info</string>
+    <string name="fragment_album_list_header">Album ID</string>
 </resources>
