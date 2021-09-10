@@ -10,7 +10,7 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class ServianViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
 
 ): ViewModel() {
 }
