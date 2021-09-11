@@ -1,20 +1,16 @@
-package com.zaidzakir.serviantest.ui
+package com.zaidzakir.serviantest.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zaidzakir.serviantest.data.localDB.ServianDatabase
 import com.zaidzakir.serviantest.data.models.albums.AlbumData
 import com.zaidzakir.serviantest.data.models.albums.AlbumDataItem
 import com.zaidzakir.serviantest.data.models.users.UsersMainData
 import com.zaidzakir.serviantest.data.models.users.UsersMainDataItem
-import com.zaidzakir.serviantest.data.remote.UserApi
-import com.zaidzakir.serviantest.repository.DefaultRepository
 import com.zaidzakir.serviantest.repository.MainRepository
 import com.zaidzakir.serviantest.util.Events
 import com.zaidzakir.serviantest.util.Resource
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

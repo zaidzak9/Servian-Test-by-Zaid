@@ -1,10 +1,8 @@
 package com.zaidzakir.serviantest.ui
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +12,7 @@ import com.zaidzakir.serviantest.data.models.users.UsersMainData
 import com.zaidzakir.serviantest.util.Constants.ID
 import com.zaidzakir.serviantest.util.Status
 import com.zaidzakir.serviantest.util.adapters.UserInfoAdapter
+import com.zaidzakir.serviantest.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_user_info.*
 

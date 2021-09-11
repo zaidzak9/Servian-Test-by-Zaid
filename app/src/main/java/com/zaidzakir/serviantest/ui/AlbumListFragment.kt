@@ -4,21 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.zaidzakir.serviantest.R
 import com.zaidzakir.serviantest.data.models.albums.AlbumData
-import com.zaidzakir.serviantest.data.models.users.UsersMainData
 import com.zaidzakir.serviantest.util.Constants
 import com.zaidzakir.serviantest.util.Status
 import com.zaidzakir.serviantest.util.adapters.AlbumListAdapter
-import com.zaidzakir.serviantest.util.adapters.UserInfoAdapter
+import com.zaidzakir.serviantest.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_album_list.*
-import kotlinx.android.synthetic.main.fragment_user_info.*
 
 /**
  *Created by Zaid Zakir
@@ -36,7 +33,7 @@ class AlbumListFragment :Fragment(R.layout.fragment_album_list) {
         recyclerView()
         val id = args.ID
         activity?.title = getString(R.string.fragment_album_list_header) + ": $id"
-        getAlbumListFromLiveData(id.toString())
+        getAlbumListFromLiveData(id)
 
         albumListAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {

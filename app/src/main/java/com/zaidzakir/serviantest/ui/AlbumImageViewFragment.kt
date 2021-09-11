@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.zaidzakir.serviantest.R
 import com.zaidzakir.serviantest.util.ImageViewerHelper
+import com.zaidzakir.serviantest.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_album_view_image.*
 import kotlinx.coroutines.CoroutineScope

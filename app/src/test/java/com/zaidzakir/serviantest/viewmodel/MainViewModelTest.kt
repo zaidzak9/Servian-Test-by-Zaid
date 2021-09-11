@@ -1,4 +1,4 @@
-package com.zaidzakir.serviantest.ui
+package com.zaidzakir.serviantest.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
@@ -8,6 +8,7 @@ import com.zaidzakir.serviantest.data.models.users.UsersMainDataItem
 import com.zaidzakir.serviantest.getOrAwaitValueTest
 import com.zaidzakir.serviantest.repository.FakeRepositoryTest
 import com.zaidzakir.serviantest.util.Status
+import com.zaidzakir.serviantest.viewmodel.MainViewModel
 import org.junit.Before
 import org.junit.Rule
 

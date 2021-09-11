@@ -1,6 +1,5 @@
 package com.zaidzakir.serviantest.ui
 
-import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -19,6 +18,7 @@ import com.zaidzakir.serviantest.reposiotry.FakeRepositoryAndroidTest
 import com.zaidzakir.serviantest.util.Constants
 import com.zaidzakir.serviantest.util.Constants.ID
 import com.zaidzakir.serviantest.util.adapters.UserInfoAdapter
+import com.zaidzakir.serviantest.viewmodel.MainViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
