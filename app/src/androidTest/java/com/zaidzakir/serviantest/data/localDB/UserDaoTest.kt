@@ -9,6 +9,8 @@ import com.google.common.truth.Truth.assertThat
 import com.zaidzakir.serviantest.data.models.albums.AlbumDataItem
 import com.zaidzakir.serviantest.data.models.users.UsersMainDataItem
 import com.zaidzakir.serviantest.getOrAwaitValue
+import com.zaidzakir.serviantest.launchFragmentInHiltContainer
+import com.zaidzakir.serviantest.ui.UserInfoFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -72,6 +74,4 @@ class UserDaoTest {
         val observeAllAlbumInfo = dao.observeAllAlbumData().getOrAwaitValue()
         assertThat(observeAllAlbumInfo).contains(albumInfo)
     }
-
-
 }

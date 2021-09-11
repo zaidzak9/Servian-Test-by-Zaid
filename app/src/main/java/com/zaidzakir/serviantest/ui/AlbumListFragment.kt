@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_user_info.*
 
 @AndroidEntryPoint
 class AlbumListFragment :Fragment(R.layout.fragment_album_list) {
-    private lateinit var albumListAdapter: AlbumListAdapter
+    lateinit var albumListAdapter: AlbumListAdapter
     lateinit var mainViewModel: MainViewModel
     val args:AlbumListFragmentArgs by navArgs()
 
@@ -36,7 +36,7 @@ class AlbumListFragment :Fragment(R.layout.fragment_album_list) {
         recyclerView()
         val id = args.ID
         activity?.title = getString(R.string.fragment_album_list_header) + ": $id"
-        getAlbumListFromLiveData(id)
+        getAlbumListFromLiveData(id.toString())
 
         albumListAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {

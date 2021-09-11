@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_user_info.*
 
 @AndroidEntryPoint
 class UserInfoFragment : Fragment(R.layout.fragment_user_info) {
-    private lateinit var userInfoAdapter: UserInfoAdapter
+    lateinit var userInfoAdapter: UserInfoAdapter
     lateinit var mainViewModel: MainViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
