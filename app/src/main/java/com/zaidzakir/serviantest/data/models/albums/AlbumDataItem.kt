@@ -12,4 +12,4 @@ data class AlbumDataItem(
     val thumbnailUrl: String?,
     val title: String?,
     val url: String?
-)
+):Serializable

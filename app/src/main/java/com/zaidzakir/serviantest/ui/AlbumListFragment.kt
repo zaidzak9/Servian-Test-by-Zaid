@@ -40,7 +40,8 @@ class AlbumListFragment :Fragment(R.layout.fragment_album_list) {
 
         albumListAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable(Constants.URL, it)
+                println("${Constants.TAG} $it")
+                putSerializable(Constants.ALBUM, it)
             }
             findNavController().navigate(
                 R.id.action_albumListFragment_to_albumImageViewFragment,

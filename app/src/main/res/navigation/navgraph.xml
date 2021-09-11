@@ -27,9 +27,9 @@
         android:name="com.zaidzakir.serviantest.ui.AlbumImageViewFragment"
         android:label="AlbumImageViewFragment" >
         <argument
-            android:name="URL"
-            app:argType="string"
+            android:name="Album"
+            app:argType="com.zaidzakir.serviantest.data.models.albums.AlbumDataItem"
             app:nullable="true"
-            android:defaultValue="https://image.shutterstock.com/image-vector/sample-stamp-grunge-texture-vector-600w-1389188327.jpg" />
+            android:defaultValue="@null"/>
     </fragment>
 </navigation>

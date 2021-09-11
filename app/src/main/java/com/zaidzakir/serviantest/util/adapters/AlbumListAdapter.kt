@@ -43,9 +43,9 @@ class AlbumListAdapter : RecyclerView.Adapter<AlbumListAdapter.AlbumListViewHold
         )
     }
 
-    private var onItemClickListener: ((String) -> Unit)? = null
+    private var onItemClickListener: ((AlbumDataItem) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (String) -> Unit) {
+    fun setOnItemClickListener(listener: (AlbumDataItem) -> Unit) {
         onItemClickListener = listener
     }
 
@@ -56,12 +56,16 @@ class AlbumListAdapter : RecyclerView.Adapter<AlbumListAdapter.AlbumListViewHold
             CoroutineScope(Dispatchers.IO).launch{
                 val bitmap = ImageViewerHelper.downloadBitmap(albumInfo.thumbnailUrl.toString())
                 withContext(Dispatchers.Main){
-                    iv_thumbnail.setImageBitmap(bitmap)
+                    if (bitmap == null){
+                        iv_thumbnail.setImageResource(R.drawable.ic_servian_logo)
+                    }else{
+                        iv_thumbnail.setImageBitmap(bitmap)
+                    }
                 }
             }
             setOnClickListener {
                 onItemClickListener?.let {
-                    it(albumInfo.url.toString())
+                    it(albumInfo)
                 }
             }
         }
