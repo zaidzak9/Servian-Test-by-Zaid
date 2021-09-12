@@ -1,37 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="20sp"
-    android:id="@+id/album_info_cardview"
-    card_view:cardBackgroundColor="@color/blue"
-    card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="8dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="albumInfo"
+            type="com.zaidzakir.serviantest.data.models.albums.AlbumDataItem" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/album_info_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10sp"
-        android:weightSum="1"
-        android:orientation="horizontal">
+        android:layout_margin="20sp"
+        android:onClick="@{clickListener}"
+        card_view:cardBackgroundColor="@color/blue"
+        card_view:cardCornerRadius="8dp"
+        card_view:cardElevation="8dp">
 
-        <ImageView
-            android:id="@+id/iv_thumbnail"
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-        <TextView
-            android:id="@+id/tv_image_name"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            style="@style/AlbumInfoTextStyle"/>
+            <ImageView
+                android:id="@+id/iv_thumbnail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                app:imageFromUrl="@{albumInfo.thumbnailUrl}" />
+
+            <TextView
+                android:id="@+id/tv_image_name"
+                style="@style/AlbumInfoTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="@{albumInfo.title}" />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</layout>

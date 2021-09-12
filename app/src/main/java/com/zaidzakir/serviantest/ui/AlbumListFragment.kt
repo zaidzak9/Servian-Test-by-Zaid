@@ -1,16 +1,17 @@
 package com.zaidzakir.serviantest.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.zaidzakir.serviantest.R
 import com.zaidzakir.serviantest.data.models.albums.AlbumData
-import com.zaidzakir.serviantest.util.Constants
+import com.zaidzakir.serviantest.databinding.FragmentAlbumListBinding
 import com.zaidzakir.serviantest.util.Status
 import com.zaidzakir.serviantest.util.adapters.AlbumListAdapter
 import com.zaidzakir.serviantest.viewmodel.MainViewModel
@@ -22,39 +23,40 @@ import kotlinx.android.synthetic.main.fragment_album_list.*
  */
 
 @AndroidEntryPoint
-class AlbumListFragment :Fragment(R.layout.fragment_album_list) {
-    lateinit var albumListAdapter: AlbumListAdapter
+class AlbumListFragment :Fragment() {
+    private var id:String?=null
+    val albumListAdapter = AlbumListAdapter()
     lateinit var mainViewModel: MainViewModel
     val args:AlbumListFragmentArgs by navArgs()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = FragmentAlbumListBinding.inflate(inflater, container, false)
+        context ?: return binding.root
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-        recyclerView()
-        val id = args.ID
+        binding.albumListRecyclerView.adapter = albumListAdapter
+        binding.albumListRecyclerView.layoutManager = LinearLayoutManager(activity)
+        id = args.ID
         activity?.title = getString(R.string.fragment_album_list_header) + ": $id"
-        getAlbumListFromLiveData(id)
-
-        albumListAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                println("${Constants.TAG} $it")
-                putSerializable(Constants.ALBUM, it)
-            }
-            findNavController().navigate(
-                R.id.action_albumListFragment_to_albumImageViewFragment,
-                bundle
-            )
-        }
+        return binding.root
     }
 
-    private fun getAlbumListFromLiveData(id: String) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        id?.let { getAlbumListFromLiveData(it,albumListAdapter) }
+    }
+
+    private fun getAlbumListFromLiveData(id: String, albumListAdapter: AlbumListAdapter) {
         mainViewModel.getAlbumListApi(id)
         mainViewModel.albums.observe(viewLifecycleOwner, {
             it?.contentIfHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
                         albumFragmentProgressBar.visibility = View.GONE
-                        albumListAdapter.differ.submitList(result.data)
+                        albumListAdapter.submitList(result.data)
                         saveAlbumItemsToDB(result.data)
                     }
                     Status.ERROR -> {
@@ -64,7 +66,7 @@ class AlbumListFragment :Fragment(R.layout.fragment_album_list) {
                             { albumInfoLocal ->
                                 if (albumInfoLocal.isNotEmpty()) {
                                     //in case of no internet or api error load data from DB
-                                    albumListAdapter.differ.submitList(albumInfoLocal)
+                                    albumListAdapter.submitList(albumInfoLocal)
 
                                 } else {
                                     view?.let {
@@ -85,13 +87,6 @@ class AlbumListFragment :Fragment(R.layout.fragment_album_list) {
         })
     }
 
-    private fun recyclerView() {
-        albumListAdapter = AlbumListAdapter()
-        albumList_recycler_view.apply {
-            adapter = albumListAdapter
-            layoutManager = LinearLayoutManager(activity)
-        }
-    }
 
     private fun saveAlbumItemsToDB(data: AlbumData?) {
         //on first time load always save copy of data in DB if DB is empty

@@ -1,15 +1,18 @@
 package com.zaidzakir.serviantest.util
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.zaidzakir.serviantest.util.Constants.BACKUP_IMG_URL
 import com.zaidzakir.serviantest.util.Constants.TAG
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
 import java.net.URL
 
 /**
  *Created by Zaid Zakir
- * download bitmap will download users image using privided url.
+ * download bitmap will download users image using provided url.
  * if it fails it will use a url value from constants
  * if that fails as well servians logo will be used from drawables folder
  */

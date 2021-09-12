@@ -1,15 +1,16 @@
 package com.zaidzakir.serviantest.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.zaidzakir.serviantest.R
 import com.zaidzakir.serviantest.data.models.users.UsersMainData
-import com.zaidzakir.serviantest.util.Constants.ID
+import com.zaidzakir.serviantest.databinding.FragmentUserInfoBinding
 import com.zaidzakir.serviantest.util.Status
 import com.zaidzakir.serviantest.util.adapters.UserInfoAdapter
 import com.zaidzakir.serviantest.viewmodel.MainViewModel
@@ -21,36 +22,32 @@ import kotlinx.android.synthetic.main.fragment_user_info.*
  */
 
 @AndroidEntryPoint
-class UserInfoFragment : Fragment(R.layout.fragment_user_info) {
-    lateinit var userInfoAdapter: UserInfoAdapter
+class UserInfoFragment : Fragment() {
     lateinit var mainViewModel: MainViewModel
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        activity?.title = getString(R.string.fragment_user_info_header)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = FragmentUserInfoBinding.inflate(inflater, container, false)
+        context ?: return binding.root
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-        recyclerView()
-        getUserInfoFromLiveData()
-
-        userInfoAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable(ID, it)
-            }
-            findNavController().navigate(
-                R.id.action_userInfoFragment_to_albumListFragment,
-                bundle
-            )
-        }
+        val userInfoAdapter = UserInfoAdapter()
+        binding.userInfoRecyclerView.adapter = userInfoAdapter
+        binding.userInfoRecyclerView.layoutManager = LinearLayoutManager(activity)
+        activity?.title = getString(R.string.fragment_user_info_header)
+        getUserInfoFromLiveData(userInfoAdapter)
+        return binding.root
     }
-
-    private fun getUserInfoFromLiveData() {
+    private fun getUserInfoFromLiveData(userInfoAdapter: UserInfoAdapter) {
         mainViewModel.getUserInfoApi()
         mainViewModel.users.observe(viewLifecycleOwner, {
             it?.contentIfHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
                         progressBar.visibility = View.GONE
-                        userInfoAdapter.differ.submitList(result.data)
+                        userInfoAdapter.submitList(result.data)
                         saveUserInfoToDB(result.data)
                     }
                     Status.ERROR -> {
@@ -60,7 +57,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_user_info) {
                             { userInfoLocal ->
                                 if (userInfoLocal.isNotEmpty()) {
                                     //in case of no internet or api error load data from DB
-                                    userInfoAdapter.differ.submitList(userInfoLocal)
+                                    userInfoAdapter.submitList(userInfoLocal)
                                 } else {
                                     view?.let {
                                         Snackbar.make(
@@ -78,15 +75,6 @@ class UserInfoFragment : Fragment(R.layout.fragment_user_info) {
                 }
             }
         })
-    }
-
-    private fun recyclerView() {
-        userInfoAdapter = UserInfoAdapter()
-
-        userInfo_recycler_view.apply {
-            adapter = userInfoAdapter
-            layoutManager = LinearLayoutManager(activity)
-        }
     }
 
     private fun saveUserInfoToDB(data: UsersMainData?) {

@@ -1,78 +1,77 @@
 package com.zaidzakir.serviantest.util.adapters
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.zaidzakir.serviantest.R
 import com.zaidzakir.serviantest.data.models.albums.AlbumDataItem
-import com.zaidzakir.serviantest.util.ImageViewerHelper
+import com.zaidzakir.serviantest.data.models.users.UsersMainDataItem
+import com.zaidzakir.serviantest.util.Constants
+import com.zaidzakir.serviantest.databinding.AdapterAlbumListBinding
 import kotlinx.android.synthetic.main.adapter_album_list.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  *Created by Zaid Zakir
  */
-class AlbumListAdapter : RecyclerView.Adapter<AlbumListAdapter.AlbumListViewHolder>() {
-    class AlbumListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+class AlbumListAdapter : ListAdapter<AlbumDataItem, RecyclerView.ViewHolder>(AlbumInfoDiffCallback()) {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<AlbumDataItem>() {
-        override fun areItemsTheSame(oldItem: AlbumDataItem, newItem: AlbumDataItem): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: AlbumDataItem, newItem: AlbumDataItem): Boolean {
-            return oldItem == newItem
-        }
-    }
-
-    val differ = AsyncListDiffer(this, diffCallback)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumListViewHolder {
-        return AlbumListViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.adapter_album_list,
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return AlbuminfoViewHolder(
+            AdapterAlbumListBinding.inflate(
+                LayoutInflater.from(parent.context),
                 parent,
                 false
             )
         )
     }
 
-    private var onItemClickListener: ((AlbumDataItem) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (AlbumDataItem) -> Unit) {
-        onItemClickListener = listener
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val albumInfo = getItem(position)
+        (holder as AlbuminfoViewHolder).bind(albumInfo)
     }
 
-    override fun onBindViewHolder(holder: AlbumListViewHolder, position: Int) {
-        val albumInfo = differ.currentList[position]
-        holder.itemView.apply {
-            tv_image_name.text = albumInfo.title
-            CoroutineScope(Dispatchers.IO).launch{
-                val bitmap = ImageViewerHelper.downloadBitmap(albumInfo.thumbnailUrl.toString())
-                withContext(Dispatchers.Main){
-                    if (bitmap == null){
-                        iv_thumbnail.setImageResource(R.drawable.ic_servian_logo)
-                    }else{
-                        iv_thumbnail.setImageBitmap(bitmap)
-                    }
-                }
-            }
-            setOnClickListener {
-                onItemClickListener?.let {
-                    it(albumInfo)
+    class AlbuminfoViewHolder(
+        private val binding: AdapterAlbumListBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.setClickListener { itemView ->
+                binding.albumInfo?.let { albumInfo ->
+                    navigateToImageViewer(albumInfo,itemView)
                 }
             }
         }
+
+        private fun navigateToImageViewer(
+            albumInfo: AlbumDataItem,
+            view: View
+        ) {
+            val bundle = Bundle().apply {
+                putSerializable(Constants.ALBUM, albumInfo)
+            }
+            view.findNavController().navigate(R.id.action_albumListFragment_to_albumImageViewFragment,bundle)
+        }
+
+        fun bind(item: AlbumDataItem) {
+            binding.apply {
+                albumInfo = item
+                executePendingBindings()
+            }
+        }
+    }
+}
+
+private class AlbumInfoDiffCallback : DiffUtil.ItemCallback<AlbumDataItem>() {
+
+    override fun areItemsTheSame(oldItem: AlbumDataItem, newItem: AlbumDataItem): Boolean {
+        return oldItem.thumbnailUrl == newItem.thumbnailUrl
     }
 
-
-    override fun getItemCount(): Int {
-        return differ.currentList.size
+    override fun areContentsTheSame(oldItem: AlbumDataItem, newItem: AlbumDataItem): Boolean {
+        return oldItem == newItem
     }
 }

@@ -1,68 +1,78 @@
 package com.zaidzakir.serviantest.util.adapters
 
-import android.util.Log
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.zaidzakir.serviantest.R
-import com.zaidzakir.serviantest.data.models.users.UsersMainData
 import com.zaidzakir.serviantest.data.models.users.UsersMainDataItem
+import com.zaidzakir.serviantest.databinding.AdapterUserInfoBinding
+import com.zaidzakir.serviantest.util.Constants
+import com.zaidzakir.serviantest.util.Constants.TAG
 import kotlinx.android.synthetic.main.adapter_user_info.view.*
 
 /**
  *Created by Zaid Zakir
  */
-class UserInfoAdapter : RecyclerView.Adapter<UserInfoAdapter.UserInfoViewHolder>() {
+class UserInfoAdapter : ListAdapter<UsersMainDataItem, RecyclerView.ViewHolder>(UserInfoDiffCallback()) {
 
-    class UserInfoViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
-
-    private val diffCallback = object : DiffUtil.ItemCallback<UsersMainDataItem>() {
-        override fun areItemsTheSame(oldItem: UsersMainDataItem, newItem: UsersMainDataItem): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: UsersMainDataItem, newItem: UsersMainDataItem): Boolean {
-            return oldItem == newItem
-        }
-    }
-
-    val differ = AsyncListDiffer(this, diffCallback)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserInfoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return UserInfoViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.adapter_user_info,
+            AdapterUserInfoBinding.inflate(
+                LayoutInflater.from(parent.context),
                 parent,
                 false
             )
         )
     }
 
-    private var onItemClickListener: ((String) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (String) -> Unit) {
-        onItemClickListener = listener
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val userInfo = getItem(position)
+        (holder as UserInfoViewHolder).bind(userInfo)
     }
 
-    override fun onBindViewHolder(holder: UserInfoViewHolder, position: Int) {
-        val userInfo = differ.currentList[position]
-        holder.itemView.apply {
-            tv_id.text = userInfo.id.toString()
-            tv_name.text = userInfo.name
-            tv_email.text = userInfo.email
-            tv_phone.text = userInfo.phone
-            setOnClickListener {
-                onItemClickListener?.let {
-                    it(userInfo.id.toString())
+    class UserInfoViewHolder(
+        private val binding: AdapterUserInfoBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.setClickListener { itemView ->
+                binding.userInfo?.let { userInfo ->
+                    navigateToAlbumInfo(userInfo,itemView)
                 }
             }
         }
+
+        private fun navigateToAlbumInfo(
+            userInfo: UsersMainDataItem,
+            view: View
+        ) {
+            val bundle = Bundle().apply {
+                putSerializable(Constants.ID, userInfo.id.toString())
+            }
+            view.findNavController().navigate(R.id.action_userInfoFragment_to_albumListFragment,bundle)
+        }
+
+        fun bind(item: UsersMainDataItem) {
+            println("$TAG $item")
+            binding.apply {
+                userInfo = item
+                executePendingBindings()
+            }
+        }
+    }
+}
+
+private class UserInfoDiffCallback : DiffUtil.ItemCallback<UsersMainDataItem>() {
+
+    override fun areItemsTheSame(oldItem: UsersMainDataItem, newItem: UsersMainDataItem): Boolean {
+        return oldItem.name == newItem.name
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
+    override fun areContentsTheSame(oldItem: UsersMainDataItem, newItem: UsersMainDataItem): Boolean {
+        return oldItem == newItem
     }
 }
