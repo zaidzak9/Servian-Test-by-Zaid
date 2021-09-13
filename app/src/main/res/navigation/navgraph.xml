@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navgraph"
+    app:startDestination="@id/userInfoFragment">
+
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="com.zaidzakir.serviantest.ui.UserInfoFragment"
+        android:label="UserInfoFragment" >
+        <action
+            android:id="@+id/action_userInfoFragment_to_albumListFragment"
+            app:destination="@id/albumListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumListFragment"
+        android:name="com.zaidzakir.serviantest.ui.AlbumListFragment"
+        android:label="AlbumListFragment" >
+        <action
+            android:id="@+id/action_albumListFragment_to_albumImageViewFragment"
+            app:destination="@id/albumImageViewFragment" />
+        <argument
+            android:name="ID"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumImageViewFragment"
+        android:name="com.zaidzakir.serviantest.ui.AlbumImageViewFragment"
+        android:label="AlbumImageViewFragment" >
+        <argument
+            android:name="Album"
+            app:argType="com.zaidzakir.serviantest.data.models.albums.AlbumDataItem"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+</navigation>

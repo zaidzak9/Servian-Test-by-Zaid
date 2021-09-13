@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Servian Test by Zaid</string>
+    <string name="fragment_user_info_header">User Info</string>
+    <string name="fragment_album_list_header">Album ID</string>
+    <string name="fragment_album_image_viewer_header">Album Image Viewer</string>
+    <string name="albumid_placeholder">Album ID : </string>
+    <string name="photoid_placeholder">Photo ID : </string>
 </resources>
