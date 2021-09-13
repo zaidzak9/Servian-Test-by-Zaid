@@ -1,6 +1,7 @@
 package com.zaidzakir.serviantest.util.adapters
 
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.zaidzakir.serviantest.R
 import com.zaidzakir.serviantest.util.ImageViewerHelper
@@ -27,5 +28,19 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
                 }
             }
         }
+    }
+}
+
+@BindingAdapter("customTextPhotoId")
+fun customTextPhotoId(view: TextView, text: String?) {
+    if (!text.isNullOrEmpty()) {
+       view.text = "Photo ID : $text"
+    }
+}
+
+@BindingAdapter("customTextAlbumId")
+fun customTextAlbumId(view: TextView, text: String?) {
+    if (!text.isNullOrEmpty()) {
+        view.text = "Album ID : $text"
     }
 }

@@ -19,7 +19,7 @@
         style="@style/UserInfoTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{args.album.albumId.toString()}"
+        app:customTextAlbumId="@{args.album.albumId.toString()}"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/photo_id_tv"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,9 +28,9 @@
 
     <TextView
         android:id="@+id/photo_id_tv"
-        android:text="@{args.album.id.toString()}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:customTextPhotoId="@{args.album.id.toString()}"
         style="@style/UserInfoTextStyle"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/album_Full_ImageView"
